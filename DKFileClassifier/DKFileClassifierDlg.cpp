@@ -128,8 +128,12 @@ BOOL CDKFileClassifierDlg::OnInitDialog()
 
 	m_hFinishEvent = CreateEvent(NULL, FALSE, FALSE, _T("Local\\Finish"));
 	HANDLE hThread = CreateThread(NULL, 0, &CDKFileClassifierDlg::ShowFinishThread, this, 0, NULL);
-	CloseHandle(hThread);
-
+	if (hThread != NULL)
+	{
+		CloseHandle(hThread);
+		hThread = NULL;
+	}
+	
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
 

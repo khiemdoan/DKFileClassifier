@@ -24,6 +24,6 @@ public:
 	BOOL		IsCopy();
 
 private:
-	string				sConfigFilePath = "config.ini";
+	string				sConfigFilePath = "DKFileClassifierConfig.ini";
 	map<string, string>	m_mapConfig;
 };

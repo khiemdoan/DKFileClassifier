@@ -15,7 +15,7 @@ struct FileType
 	TCHAR*	ext;
 	TCHAR*	folder;
 	int		sig_legth;
-	byte	sig[20];
+	byte	sig[30];
 };
 
 class DKFileIdentifier
@@ -28,6 +28,7 @@ public:
 private:
 	FileType	GetTypePe();
 	FileType	GetTypeByHeader();
+	FileType	GetTypeByCompareString();
 
 	_tstring	m_sFilePath;
 };

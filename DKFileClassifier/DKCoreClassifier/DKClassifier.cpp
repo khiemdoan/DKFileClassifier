@@ -52,7 +52,11 @@ VOID DKClassifier::Run()
 {
 	m_bRunning = TRUE;
 	HANDLE hThread = CreateThread(NULL, 0, &DKClassifier::Classify, this, 0, NULL);
-	CloseHandle(hThread);
+	if (hThread != NULL)
+	{
+		CloseHandle(hThread);
+		hThread = NULL;
+	}
 }
 
 VOID DKClassifier::Stop()
@@ -100,6 +104,11 @@ DWORD WINAPI DKClassifier::Classify(LPVOID lpThisClass)
 			thisclass->SendToNewFolder(sFilePath, fileType);
 
 		} while (FindNextFile(hFind, &w32Data));
+
+		if (thisclass->m_hFinishEvent != NULL)
+		{
+			SetEvent(thisclass->m_hFinishEvent);
+		}
 	}
 	__finally
 	{
@@ -108,11 +117,6 @@ DWORD WINAPI DKClassifier::Classify(LPVOID lpThisClass)
 			FindClose(hFind);
 			hFind = INVALID_HANDLE_VALUE;
 		}
-	}
-
-	if (thisclass->m_hFinishEvent != NULL)
-	{
-		SetEvent(thisclass->m_hFinishEvent);
 	}
 
 	thisclass->m_bRunning = TRUE;
