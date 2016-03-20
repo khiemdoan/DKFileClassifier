@@ -77,9 +77,13 @@ BOOL DKFile::SetData(DWORD dwOffset, DWORD dwSize, LPVOID lpData)
 	return TRUE;
 }
 
-DWORD DKFile::FindSubStringA(DWORD dwPos, DWORD dwCount, LPCH szSubString)
+DWORD DKFile::FindSubStringA(DWORD dwOffset, DWORD dwCount, LPCH szSubString)
 {
-	std::string str((char*)m_lpAddress, dwPos, dwCount);
+	if (dwOffset > m_dwFileSize)
+		return -1;
+
+	dwCount = min(dwCount, m_dwFileSize - dwOffset);
+	std::string str((char*)m_lpAddress + dwOffset, 0, dwCount);
 	std::transform(str.begin(), str.end(), str.begin(), [](char c) { return std::tolower(c); });
 	std::string::size_type find = str.find(szSubString);
 	if (find == std::string::npos)
@@ -87,9 +91,13 @@ DWORD DKFile::FindSubStringA(DWORD dwPos, DWORD dwCount, LPCH szSubString)
 	return find;
 }
 
-DWORD DKFile::FindSubStringW(DWORD dwPos, DWORD dwCount, LPCWCHAR szSubString)
+DWORD DKFile::FindSubStringW(DWORD dwOffset, DWORD dwCount, LPCWCHAR szSubString)
 {
-	std::wstring str((wchar_t*)m_lpAddress, dwPos, dwCount);
+	if (dwOffset > m_dwFileSize)
+		return -1;
+
+	dwCount = min(dwCount, (m_dwFileSize - dwOffset) / 2);
+	std::wstring str((wchar_t*)m_lpAddress + dwOffset, 0, dwCount);
 	std::transform(str.begin(), str.end(), str.begin(), [](wchar_t c) { return std::tolower(c); });
 	std::wstring::size_type find = str.find(szSubString);
 	if (find == std::wstring::npos)

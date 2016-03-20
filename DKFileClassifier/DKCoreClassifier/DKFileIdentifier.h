@@ -28,7 +28,6 @@ public:
 private:
 	FileType	GetTypePe();
 	FileType	GetTypeByHeader();
-	FileType	GetTypeByCompareString();
 
 	_tstring	m_sFilePath;
 };

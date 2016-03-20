@@ -84,13 +84,7 @@ FileType DKFileIdentifier::Check()
 	{
 		return fileType;
 	}
-
-	fileType = GetTypeByCompareString();
-	if (memcmp(&fileType, &other, sizeof(FileType)) != 0)
-	{
-		return fileType;
-	}
-
+	
 	return other;
 }
 
@@ -142,17 +136,10 @@ FileType DKFileIdentifier::GetTypeByHeader()
 		}
 	}
 
-	return other;
-}
-
-FileType DKFileIdentifier::GetTypeByCompareString()
-{
-	DKFile file((LPTSTR)m_sFilePath.c_str());
-
 	if (file.FindSubStringA(0, 20, "html") != -1)
 		return html;
 	if (file.FindSubStringW(0, 20, L"html") != -1)
 		return html;
-	
-	return FileType();
+
+	return other;
 }
